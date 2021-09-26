@@ -1,0 +1,46 @@
+#隠しファイル
+.*
+!.gitignore
+!.vimrc
+!.zshrc
+
+#backend
+backend/karte/settings.py
+backend/karte/__pycache__
+backend/karte/uwsgi/uwsgi.log
+
+
+#frontend
+# dependencies
+frontend/karte/node_modules
+frontend/karte/.pnp
+frontend/karte/.pnp.js
+
+# testing
+frontend/karte/coverage
+
+# next.js
+frontend/karte/.next/
+frontend/karte/out/
+
+# production
+frontend/karte/build
+
+# misc
+frontend/karte/.DS_Store
+frontend/karte/*.pem
+
+# debug
+frontend/karte/npm-debug.log*
+frontend/karte/yarn-debug.log*
+frontend/karte/yarn-error.log*
+
+# local env files
+frontend/karte/.env.local
+frontend/karte/.env.development.local
+frontend/karte/.env.test.local
+frontend/karte/.env.production.local
+
+# vercel
+frontend/karte/.vercel
+
