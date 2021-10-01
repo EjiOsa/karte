@@ -10,6 +10,7 @@ django-filter = "*"
 djangorestframework-jwt = "*"
 pymysql = "*"
 uwsgi = "*"
+pylint-django = "*"
 
 [dev-packages]
 
