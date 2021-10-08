@@ -1,15 +1,8 @@
 from django.db import models
 from apps.master.models import Rest,Disease
+from apps.const import SEX_SET,SEX_UNKNOWN
 # Create your models here.
-"""性別"""
-SEX_UNKNOWN = "UNKNOWN"
-SEX_MALE = "male"
-SEX_FEMALE = "female"
-SEX_SET = (
-        (SEX_UNKNOWN, "不明"),
-        (SEX_MALE, "男性"),
-        (SEX_FEMALE, "女性"),
-)
+
 class Patient(models.Model):
     """患者"""
     last_name = models.CharField(verbose_name = "苗字", max_length = 64, default = None,)

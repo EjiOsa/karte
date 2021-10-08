@@ -1,21 +1,8 @@
 from django.db import models
+from apps.const import JOB_SET
 
 # Create your models here.
-"""職業"""
-JOB_DOCTOR = "DOCTOR"
-JOB_NURSE = "NURSE"
-JOB_PHARMACIST = "PHARMACIST"
-JOB_PHYSICAL = "PHYSICAL"
-JOB_OCCUPATIONAL = "OCCUPATIONAL"
-JOB_CLERK = "CLERK"
-JOB_SET = (
-        (JOB_DOCTOR, "医師"),
-        (JOB_NURSE, "看護師"),
-        (JOB_PHARMACIST, "薬剤師"),
-        (JOB_PHYSICAL, "理学療法士"),
-        (JOB_OCCUPATIONAL, "作業療法士"),
-        (JOB_CLERK, "事務員"),
-)
+
 class Disease(models.Model):
     """疾患"""
     name_ja = models.CharField(verbose_name = "疾患名", max_length = 128, unique = True)
