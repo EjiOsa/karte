@@ -1,39 +1,23 @@
 from django.db import models
-from django.db.models.fields import json
-from apps.staff.models import Staff
+from apps.master.models import Rest,Disease
 # Create your models here.
 
-class Disease(models.Model):
-    """疾患"""
-    name = models.CharField(verbose_name = "疾患名", max_length = 128, unique = True)
-    maker = models.ForeignKey(Staff,
-                              on_delete = models.PROTECT,
-                              verbose_name = "作成者",
-                              limit_choices_to={"job": 1,} )
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "疾患"
-        verbose_name_plural = "疾患"
-
-class Rest(models.Model):
-    """安静度"""
-    level = models.CharField(verbose_name = "安静度", max_length = 32,)
-    maker = models.ForeignKey(Staff, on_delete = models.PROTECT, verbose_name = "作成者", )
-
-    def __str__(self):
-        return self.level
-
-    class Meta:
-        verbose_name = "安静度"
-        verbose_name_plural = "安静度"
-
 class Patient(models.Model):
+    SEX_UNKNOWN = "UNKNOWN"
+    SEX_MALE = "male"
+    SEX_FEMALE = "female"
+    SEX_SET = (
+            (SEX_UNKNOWN, "不明"),
+            (SEX_MALE, "男性"),
+            (SEX_FEMALE, "女性"),
+    )
     """患者"""
-    name = models.CharField(verbose_name = "氏名", max_length=64)
+    last_name = models.CharField(verbose_name = "苗字", max_length=64)
+    first_name = models.CharField(verbose_name = "名前", max_length=64)
+    last_name_kana = models.CharField(verbose_name = "みょうじ", max_length=64)
+    first_name_kana = models.CharField(verbose_name = "なまえ", max_length=64)
     age = models.PositiveSmallIntegerField(verbose_name = "年齢",)
+    sex = models.CharField(verbose_name = "性別", choices=SEX_SET, default=SEX_UNKNOWN, max_length=8,)
     level = models.ForeignKey(Rest, on_delete = models.PROTECT, verbose_name = "安静度")
     disease = models.ForeignKey(Disease, on_delete = models.PROTECT, verbose_name = "疾患名")
     created_at = models.DateTimeField(auto_now_add = True)

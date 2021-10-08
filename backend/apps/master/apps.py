@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class PatientConfig(AppConfig):
+class MasterConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.patient'
-    verbose_name = "患者情報"
+    name = 'apps.master'
+    verbose_name = "マスター"
