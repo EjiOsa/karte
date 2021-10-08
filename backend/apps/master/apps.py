@@ -4,4 +4,4 @@ from django.apps import AppConfig
 class MasterConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.master'
-    verbose_name = "マスター"
+    verbose_name = "3) マスタ"

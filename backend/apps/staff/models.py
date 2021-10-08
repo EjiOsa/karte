@@ -1,13 +1,8 @@
 from django.db import models
 from apps.master.models import Role
+from apps.const import SEX_SET
 # Create your models here.
-"""性別"""
-SEX_MALE = "male"
-SEX_FEMALE = "female"
-SEX_SET = (
-        (SEX_MALE, "男性"),
-        (SEX_FEMALE, "女性"),
-)
+
 class Doctor(models.Model):
     """医師"""
     last_name = models.CharField(verbose_name = "苗字", max_length = 64, default = None,)
@@ -26,7 +21,7 @@ class Doctor(models.Model):
 
     class Meta:
         verbose_name = "医師"
-        verbose_name_plural = "医師"
+        verbose_name_plural = "1.医師"
 
 class Nurse(models.Model):
     """看護師"""
@@ -46,7 +41,7 @@ class Nurse(models.Model):
 
     class Meta:
         verbose_name = "看護師"
-        verbose_name_plural = "看護師"
+        verbose_name_plural = "2.看護師"
 
 class Pharmacist(models.Model):
     """薬剤師"""
@@ -66,7 +61,7 @@ class Pharmacist(models.Model):
 
     class Meta:
         verbose_name = "薬剤師"
-        verbose_name_plural = "薬剤師"
+        verbose_name_plural = "3.薬剤師"
 
 class Physical(models.Model):
     """理学療法士"""
@@ -86,7 +81,7 @@ class Physical(models.Model):
 
     class Meta:
         verbose_name = "理学療法士"
-        verbose_name_plural = "理学療法士"
+        verbose_name_plural = "4.理学療法士"
 
 class Occupational(models.Model):
     """作業療法士"""
@@ -106,7 +101,7 @@ class Occupational(models.Model):
 
     class Meta:
         verbose_name = "作業療法士"
-        verbose_name_plural = "作業療法士"
+        verbose_name_plural = "5.作業療法士"
 
 class Clerk(models.Model):
     """事務職"""
@@ -126,4 +121,4 @@ class Clerk(models.Model):
 
     class Meta:
         verbose_name = "事務員"
-        verbose_name_plural = "事務員"
+        verbose_name_plural = "6.事務員"
