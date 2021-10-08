@@ -9,6 +9,7 @@ backend/karte/settings.py
 backend/karte/__pycache__
 backend/karte/uwsgi/uwsgi.log
 backend/karte/uwsgi/uwsgi.pid
+backend/apps/*/__pycache__
 
 #frontend
 # dependencies
