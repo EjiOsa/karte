@@ -13,4 +13,7 @@ class Rest(admin.ModelAdmin):
 
 @admin.register(Role)
 class Role(admin.ModelAdmin):
-    pass
+    list_display = ("name", "target",)
+    ordering = ("-target",)
+    list_filter = ("target",)
+    # search_fields = ("name", )　とりあえず動くことの確認
