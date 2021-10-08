@@ -1,7 +1,21 @@
 from django.db import models
 
 # Create your models here.
-
+"""職業"""
+JOB_DOCTOR = "DOCTOR"
+JOB_NURSE = "NURSE"
+JOB_PHARMACIST = "PHARMACIST"
+JOB_PHYSICAL = "PHYSICAL"
+JOB_OCCUPATIONAL = "OCCUPATIONAL"
+JOB_CLERK = "CLERK"
+JOB_SET = (
+        (JOB_DOCTOR, "医師"),
+        (JOB_NURSE, "看護師"),
+        (JOB_PHARMACIST, "薬剤師"),
+        (JOB_PHYSICAL, "理学療法士"),
+        (JOB_OCCUPATIONAL, "作業療法士"),
+        (JOB_CLERK, "事務員"),
+)
 class Disease(models.Model):
     """疾患"""
     name_ja = models.CharField(verbose_name = "疾患名", max_length = 128, unique = True)
@@ -30,23 +44,10 @@ class Rest(models.Model):
         verbose_name = "安静度"
         verbose_name_plural = "安静度"
 
-class Job(models.Model):
-    """職種"""
-    name = models.CharField(verbose_name = "職種名",max_length = 32, unique = True)
-    created_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "職種"
-        verbose_name_plural = "職種"
-
 class Role(models.Model):
     """権限"""
     name = models.CharField(verbose_name = "権限名", max_length = 32)
-    target = models.ForeignKey(Job, on_delete = models.PROTECT, verbose_name = "対象職種", max_length = 32)
+    target = models.CharField(verbose_name = "対象職種", choices = JOB_SET, max_length = 32)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 

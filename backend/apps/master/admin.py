@@ -11,10 +11,6 @@ class Disease(admin.ModelAdmin):
 class Rest(admin.ModelAdmin):
     pass
 
-@admin.register(Job)
-class Job(admin.ModelAdmin):
-    pass
-
 @admin.register(Role)
 class Role(admin.ModelAdmin):
     pass
