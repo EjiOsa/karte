@@ -1,6 +1,6 @@
 from django.db import models
-from apps.master.models import Role
-from apps.const import SEX_SET
+from applications.master.models import Role
+from applications.const import SEX_SET
 # Create your models here.
 
 class Doctor(models.Model):

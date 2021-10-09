@@ -1,5 +1,5 @@
 from django.db import models
-from apps.const import JOB_SET
+from applications.const import JOB_SET
 
 # Create your models here.
 

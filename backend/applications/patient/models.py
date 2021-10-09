@@ -1,6 +1,6 @@
 from django.db import models
-from apps.master.models import Rest,Disease
-from apps.const import SEX_SET,SEX_UNKNOWN
+from applications.master.models import Rest,Disease
+from applications.const import SEX_SET,SEX_UNKNOWN
 # Create your models here.
 
 class Patient(models.Model):
