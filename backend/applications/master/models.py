@@ -11,7 +11,7 @@ class Disease(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.name
+        return self.name_ja
 
     class Meta:
         verbose_name = "疾患"
