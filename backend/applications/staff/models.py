@@ -17,7 +17,7 @@ class Doctor(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.last_name
+        return f"{ self.last_name } {self.first_name }"
 
     class Meta:
         verbose_name = "医師"
@@ -37,7 +37,7 @@ class Nurse(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.last_name
+        return f"{ self.last_name } {self.first_name }"
 
     class Meta:
         verbose_name = "看護師"
@@ -57,7 +57,7 @@ class Pharmacist(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.last_name
+        return f"{ self.last_name } {self.first_name }"
 
     class Meta:
         verbose_name = "薬剤師"
@@ -77,7 +77,7 @@ class Physical(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.last_name
+        return f"{ self.last_name } {self.first_name }"
 
     class Meta:
         verbose_name = "理学療法士"
@@ -97,7 +97,7 @@ class Occupational(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.last_name
+        return f"{ self.last_name } {self.first_name }"
 
     class Meta:
         verbose_name = "作業療法士"
@@ -117,7 +117,7 @@ class Clerk(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.last_name
+        return f"{ self.last_name } {self.first_name }"
 
     class Meta:
         verbose_name = "事務員"

@@ -17,7 +17,7 @@ class Patient(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.last_name
+        return f"{ self.last_name } {self.first_name }"
 
     class Meta:
         verbose_name = "患者"
