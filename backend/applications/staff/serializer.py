@@ -26,6 +26,20 @@ class DoctorSerializer(serializers.ModelSerializer):
         del validated_data['role_uid']
         return Doctor.objects.create(**validated_data)
 
+    # PUT時に外部キーを変更できなかった、これが正解かは不明だが更新可能になっている。
+    def update(self, instance, validated_data):
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name_kana = validated_data.get('last_name_kana', instance.last_name_kana)
+        instance.first_name_kana = validated_data.get('first_name_kana', instance.first_name_kana)
+        instance.age = validated_data.get('age', instance.age)
+        instance.sex = validated_data.get('sex', instance.sex)
+        instance.role = validated_data.get('role_uid', None)
+        instance.save()
+
+        del validated_data['role_uid']
+        return instance
+
     class Meta:
         model = Doctor
         fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role','role_uid',)
