@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 
 from applications.patient.urls import router as patient_roter
+from applications.staff.urls import router as staff_roter
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('api/patient',include(patient_roter.urls)),
+    path('api/',include(patient_roter.urls)),
+    path('api/staff/',include(staff_roter.urls)),
 ]
