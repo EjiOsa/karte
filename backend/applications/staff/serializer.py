@@ -1,4 +1,3 @@
-from django.db.models.enums import Choices
 from rest_framework import serializers
 from .models import *
 from applications.master.models import Role
@@ -10,12 +9,17 @@ class RoleSerializer(serializers.ModelSerializer):
         # fields = '__all__'
         fields = ('id', 'name',)
 
-class DoctorSerializer(serializers.ModelSerializer):
-    # role = serializers.StringRelatedField()
+class StaffSerializer(serializers.ModelSerializer):
+    """スタッフ共通シリアライザ"""
+    # role関連はスタッフ共通なので、親クラスとして作成
+    # role_uidは各職種によって変わるので関数化
+
     role = RoleSerializer(read_only = True)
-    role_uid = serializers.PrimaryKeyRelatedField(queryset = Role.objects.filter(target = "DOCTOR"),
+    def make_role_uid(self, target):
+        role_uid = serializers.PrimaryKeyRelatedField(queryset = Role.objects.filter(target = target),
                                                 write_only = True,
                                                 label = "権限名",)
+        return role_uid
 
     # POST時に権限名の値をroleに渡すため、createメソッドをオーバーライド
     def create(self, validated_data):
@@ -37,31 +41,38 @@ class DoctorSerializer(serializers.ModelSerializer):
         del validated_data['role_uid']
         return super().update(instance, validated_data)
 
+class DoctorSerializer(StaffSerializer):
+    role_uid = StaffSerializer().make_role_uid("Doctor")
     class Meta:
         model = Doctor
         fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role','role_uid',)
 
-class NurseSerializer(serializers.ModelSerializer):
+class NurseSerializer(StaffSerializer):
+    role_uid = StaffSerializer().make_role_uid("Nurse")
     class Meta:
         model = Nurse
-        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role',)
+        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role','role_uid',)
 
-class PharmacistSerializer(serializers.ModelSerializer):
+class PharmacistSerializer(StaffSerializer):
+    role_uid = StaffSerializer().make_role_uid("Pharmacist")
     class Meta:
         model = Pharmacist
-        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role',)
+        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role','role_uid',)
 
-class PhysicalSerializer(serializers.ModelSerializer):
+class PhysicalSerializer(StaffSerializer):
+    role_uid = StaffSerializer().make_role_uid("Physical")
     class Meta:
         model = Physical
-        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role',)
+        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role','role_uid',)
 
-class OccupationalSerializer(serializers.ModelSerializer):
+class OccupationalSerializer(StaffSerializer):
+    role_uid = StaffSerializer().make_role_uid("Occupational")
     class Meta:
         model = Occupational
-        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role',)
+        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role','role_uid',)
 
-class ClerkSerializer(serializers.ModelSerializer):
+class ClerkSerializer(StaffSerializer):
+    role_uid = StaffSerializer().make_role_uid("Clerk")
     class Meta:
         model = Clerk
-        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role',)
+        fields = ('last_name','first_name','last_name_kana','first_name_kana','age','sex','role','role_uid',)
