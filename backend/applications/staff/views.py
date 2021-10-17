@@ -1,15 +1,21 @@
-import django_filters
-from rest_framework import viewsets, filters
+from django_filters import rest_framework as filters
+from rest_framework import viewsets
 
 from .models import *
 from .serializer import *
 # from django.shortcuts import render
 
+class DoctorFilter(filters.FilterSet):
+    # フィルタの定義(カラム名と同名なら、field_nameは不要)
+    created = filters.DateFilter(field_name = 'created_at', lookup_expr = 'gte')
+    class Meta:
+        model = Doctor
+        fields = ['sex', 'role', 'created']
 # Create your views here.
 class DocterViewSet(viewsets.ModelViewSet):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
-    filter_fields = ('sex','role')
+    filter_class = DoctorFilter
 
 class NurseViewSet(viewsets.ModelViewSet):
     queryset = Nurse.objects.all()
