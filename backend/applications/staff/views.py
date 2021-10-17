@@ -9,6 +9,7 @@ from .serializer import *
 class DocterViewSet(viewsets.ModelViewSet):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
+    filter_fields = ('sex','role')
 
 class NurseViewSet(viewsets.ModelViewSet):
     queryset = Nurse.objects.all()
