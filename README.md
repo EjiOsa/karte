@@ -355,7 +355,7 @@ WantedBy=multi-user.target
 ## 4. 環境構築 DangoRestFramework（user権限）
 
 **backendディレクトリ配下で展開**  
-Djangoまでのアクセスは以下のようになる。
+Djangoまでのアクセスは以下のようになる
 
 - **ブラウザ→nginx→uWSGI→Django**
 
@@ -392,11 +392,11 @@ Djangoまでのアクセスは以下のようになる。
 
 #### 4-1-4. djangoの起動確認
 
-- **ブラウザで確認したかったが、うまくいかなかった**  
+- **サーバー起動**  
 `python manage.py runserver 192.168.56.11:8001`  
 `python manage.py runserver 0.0.0.0:8001`  
 
-- **curlコマンドで確認**  
+- **ブラウザで確認したかったが、うまくいかなかったのでcurlコマンドで確認**  
 `curl 192.168.56.11:8001`  
 
 #### 4-1-5. djangoのアクセスにlocalhostを追加
@@ -409,7 +409,7 @@ LANGUAGE_CODE = 'ja'
 TIME_ZONE = 'Asia/Tokyo'
 ```
 
-### 4-2. uWSGI（APサーバみたいなもの）
+### 4-2. uWSGI（APサーバーみたいなもの）
 
 - **上記まででDjangoのサーバー起動＆動作確認が完了している。ここではuWSGIでDjangoを動かす**
 
