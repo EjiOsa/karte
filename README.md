@@ -14,13 +14,13 @@
 
 ### 2-1. NATとホストオンリーアダプター接続
 
-**参考資料**
+**参考資料**  
 <https://blog.proglus.jp/3315/>
 <https://uktia.hatenablog.jp/entry/20191102/1572698888>
 
 ### 2-2. SSH接続
 
-**参考資料**
+**参考資料**  
 <https://qiita.com/uhooi/items/137de4578534c8e7e7f2>
 <https://qiita.com/CloudRemix/items/8b318c19e001d5a9b40d>
 
@@ -35,18 +35,18 @@
 
 ##### 2-2-1-2. sshのパスを毎回聞かれる場合
 
-登録確認
+登録確認  
 `ssh-add -l`
 
-SSH鍵をssh-agentに登録
+SSH鍵をssh-agentに登録  
 `ssh-add -K`
 （sshのファイル名が.ssh/id_rsaなので省略でOK）
 
 ### 2-3. 時間同期
 
 再起動すると時間同期しているが、入りっぱなしだとダメ？
-`VBoxManage guestproperty set karte "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold" 1000`
-`VBoxManage setextradata "karte" "VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled" 0`
+`VBoxManage guestproperty set karte "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold" 1000`  
+`VBoxManage setextradata "karte" "VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled" 0`  
 
 ## 3. 環境構築 CentOS Stream（root権限）
 
@@ -82,15 +82,15 @@ SELINUX=disabled
 
 ### 3-4. ファイアウォール操作
 
-#### (nginxインストール後にhttp接続するためにhttpを追加＆リロード)
+#### (nginxインストール後にhttp接続するためにhttpを追加＆リロード)  
 
-`firewall-cmd --permanent --zone=public --add-service=http`
-`firewall-cmd --reload`
+`firewall-cmd --permanent --zone=public --add-service=http`  
+`firewall-cmd --reload`  
 
-`systemctl start firewalld.service`
-`systemctl stop firewalld.service`
-`systemctl status firewalld.service`
-`sudo firewall-cmd --state`
+`systemctl start firewalld.service`  
+`systemctl stop firewalld.service`  
+`systemctl status firewalld.service`  
+`sudo firewall-cmd --state`  
 
 ### 3-5. userをsudo可能にする
 
@@ -104,52 +104,52 @@ XXXX    ALL=(ALL)       ALL
 
 ### 3-6. タイムゾーン
 
-- ロケール確認
+- ロケール確認  
 `localectl`
 
-- 「ja_JP.UTF-8」ではないときにロケール変更
+- 「ja_JP.UTF-8」ではないときにロケール変更  
 `localectl set-locale LANG=ja_JP.UTF-8`
 
-- タイムゾーン確認
+- タイムゾーン確認  
 `timedatectl`
 
-- 「Time zone: Asia/Tokyo (JST, +0900)」ではないときにタイムゾーン設定
+- 「Time zone: Asia/Tokyo (JST, +0900)」ではないときにタイムゾーン設定  
 `timedatectl set-timezone Asia/Tokyo`
 
 ### 3-7. 時刻同期
 
 #### いまいち同期していない
 
-`dnf install chrony`
+`dnf install chrony`  
 
-`sudo systemctl start churned`
-`sudo systemctl enable chronyd`
+`sudo systemctl start churned`  
+`sudo systemctl enable chronyd`  
 
-- 確認
+- 確認  
 `chronyc sources -v`
 
-### 3-8. 必要なツール類を入れる
+### 3-8. 必要なツール類を入れる  
 
-`dnf update`
-`dnf install vim mailx unzip bash-completion net-tools wget git yum-utils which telnet sudo bind-utils man rsyslog sysstat jq`
+`dnf update`  
+`dnf install vim mailx unzip bash-completion net-tools wget git yum-utils which telnet sudo bind-utils man rsyslog sysstat jq`  
 
-- これはuwsgiインストールエラー解消のために追加
-`dnf group install 'Development Tools'`
+- これはuwsgiインストールエラー解消のために追加  
+`dnf group install 'Development Tools'`  
 `dnf install python39-devel`
 
 ### 3-9. MySQL8
 
-- 最新版を確認
+- 最新版を確認  
 `dnf info mysql`
 
-- インストール
+- インストール  
 `dnf install @mysql:8.0`
 
-- 確認
+- 確認  
 `mysql --version`
 
-- 自動起動
-`systemctl start mysqld.service`
+- 自動起動  
+`systemctl start mysqld.service`  
 `systemctl enable mysqld.service`
 
 #### 3-9-1. mysqlの初期設定
@@ -159,14 +159,14 @@ XXXX    ALL=(ALL)       ALL
 - mysql_secure_installation
 PASS:XXXX1234
 
-- db作成
+- db作成  
 `mysql -u root -p`
 
 `> create database karte;`
 
 ### 3-10. nginx
 
-ダウンロード用の設定？
+ダウンロード用の設定？  
 `vim /etc/yum.repos.d/nginx.repo`
 
 ```nginx.repo
@@ -178,10 +178,10 @@ enabled=1
 gpgkey=https://nginx.org/keys/nginx_signing.key
 ```
 
-#### 3-10-1. インストール
+#### 3-10-1. インストール  
 
-`dnf install nginx`
-`systemctl start nginx`
+`dnf install nginx`  
+`systemctl start nginx`  
 `systemctl enable nginx`
 
 `systemctl status nginx`
@@ -192,12 +192,12 @@ gpgkey=https://nginx.org/keys/nginx_signing.key
 
 #### 3-10-2. djangoとの連携用
 
-`sudo mkdir /usr/share/nginx/html/media`
-`sudo mkdir /usr/share/nginx/html/static`
+`sudo mkdir /usr/share/nginx/html/media`  
+`sudo mkdir /usr/share/nginx/html/static`  
 
-`chmod -R 775 /usr/share/nginx/html/static/`
-`chown -R root:nginx /usr/share/nginx/html/static/`
-`chmod -R 775 /usr/share/nginx/html/media/`
+`chmod -R 775 /usr/share/nginx/html/static/`  
+`chown -R root:nginx /usr/share/nginx/html/static/`  
+`chmod -R 775 /usr/share/nginx/html/media/`  
 `chown -R root:nginx /usr/share/nginx/html/media/`
 
 ### 3-11. python3
@@ -210,30 +210,30 @@ gpgkey=https://nginx.org/keys/nginx_signing.key
 
 #### 3-11-2. 最新の3.9をインストール
 
-`dnf module -y install python39`
+`dnf module -y install python39`  
 **OSの依存関係はデフォルトの3.6を使用して、開発用にはインストールした3.9を使用する。**
 
-- 確認（まだ3.9にはならない）
+- 確認（まだ3.9にはならない）  
 `python3 -V`
 
-- python3で使用するバージョンを切り替える
+- python3で使用するバージョンを切り替える  
 `alternatives --config python3`
 
-- 確認（3.9になるはず）
+- 確認（3.9になるはず）  
 `python3 -V`
 
 #### 3-11-3. pipenv導入と紐付け
 
-**3.6に紐づけてしまってWarningが出る場合はvi Pipfileで3.6⇨3.9に修正**
+**3.6に紐づけてしまってWarningが出る場合はvi Pipfileで3.6⇨3.9に修正**  
 `pip3 install pipenv`
 
 ### 3-12. next.js
 
-- 準備
-`dnf module -y install nodejs:14`
+- 準備  
+`dnf module -y install nodejs:14`  
 `npm install -g yarn`
 
-- よくわからないけど、言われたままに実施
+- よくわからないけど、言われたままに実施  
 `npx browserslist@latest --update-db`
 
 ### 3-13. NginxとuWSGIの連携
@@ -242,17 +242,17 @@ gpgkey=https://nginx.org/keys/nginx_signing.key
 
 ##### runディレクトリに配置しないと権限エラーになる
 
-- ただ権限絡みで動かないので、自由なディレクトリを作成。
-`mkdir /run/uwsgi`
-`chmod 775 uwsgi`
+- ただ権限絡みで動かないので、自由なディレクトリを作成。  
+`mkdir /run/uwsgi`  
+`chmod 775 uwsgi`  
 `chown nginx:nginx uwsgi`
 
 #### 3-13-2. /run配下は再起動で削除されるので対象外設定
 
-**参考資料**
+**参考資料**  
 <https://qiita.com/suemoc/items/e29285e8e67263298f35>
 
-- 削除対象外の設定
+- 削除対象外の設定  
 `vim /etc/tmpfiles.d/hoge.conf`
 
 ```hoge.conf
@@ -300,26 +300,28 @@ server {
 
 ### 3-13-4. uwsgi_params の準備
 
-`cd /etc/nginx/`
+`cd /etc/nginx/`  
 `cp uwsgi_params ~/backend/karte`
 
 **グループの設定（exit後に反映される）**
 
-- 確認
-`id XXXX`
+- 確認  
+`id XXXX`  
 `groups XXXX`
-- 設定
+
+- 設定  
 `usermod -aG nginx XXXX`
-- 確認
-`id XXXX`
+
+- 確認  
+`id XXXX`  
 `groups XXXX`
 
 #### 3-13-5. uwsgiのINIファイル自動起動用のサービス作成
 
-/etc/systemd/systemにsystemctlの自動起動用ファイル(ここではuwsgi.service)を作成
+/etc/systemd/systemにsystemctlの自動起動用ファイル(ここではuwsgi.service)を作成  
 仮想環境(pipenv)でプロジェクトを作成したため、uwsgi.serviceのExecStartには仮想環境内でpipenv --venvで確認した実行ファイルの場所を指定
 
-`cd /etc/systemd/system`
+`cd /etc/systemd/system`  
 `vim uwsgi.service`
 
 ```uwsgi.service
@@ -339,12 +341,12 @@ NotifyAccess=main
 WantedBy=multi-user.target
 ```
 
-- **サービスファイルを変更したらデーモンリロード**
+- **サービスファイルを変更したらデーモンリロード**  
 `systemctl daemon-reload`
 
-- **サービスファイルの確認と自動化設定**
-`systemctl status uwsgi`
-`systemctl start uwsgi`
+- **サービスファイルの確認と自動化設定**  
+`systemctl status uwsgi`  
+`systemctl start uwsgi`  
 `systemctl enable uwsgi`
 
 ## 4. 環境構築 DangoRestFramework（user権限）
@@ -363,19 +365,19 @@ Next.jsまでのアクセスは以下のようになる。
 
 ### 5-1. next.js
 
-**プロジェクトの作成（typescriptを使用）**
-`cd frontend`
+**プロジェクトの作成（typescriptを使用）**  
+`cd frontend`  
 `npx create-next-app karte --ts`
 
-**プロジェクト運用**
-`cd karte`
+**プロジェクト運用**  
+`cd karte`  
 `yarn dev`
 
 ### 5-2. Nginxの設定にnextjsの開発サーバーアクセスを追加
 
 #### （これはroot権限の作業で実施済み）
 
-**以下は抜粋**
+**以下は抜粋**  
 `vim /etc/nginx/conf.d/project.conf`
 
 ```project.conf
