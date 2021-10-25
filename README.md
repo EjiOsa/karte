@@ -446,7 +446,7 @@ def application(env, start_response):
 <br>
 
 - **ここでエラーが発生したため、以下のコマンドでエラー解除した**  
-<https://qiita.com/S8s8Max/items/e9852debecba996d215c>
+<https://qiita.com/S8s8Max/items/e9852debecba996d215c>  
 `python manage.py collectstatic`  
 
 #### 4-2-4. uWSGIの起動をINIファイルで実施（自動起動のために必要）
