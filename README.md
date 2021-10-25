@@ -1,14 +1,17 @@
 # 学習記録
 
+疎結合にするため、フロントエンドとバックエンドをAPI接続にする。  
+インフラ周りの学習も兼ねているため、仮想環境で学習開始。  
+予習不足でVagrantは未使用。  
+
 ## 1. 基本構成
 
-- 仮想環境：VirtualBox（Vagrant未使用）
-
-- OS：CentOS Stream
-- Webサーバー：nginx
-- Frontend：next.js
-- Backend：Dango Rest Framework
-- DB：MySQL
+- **仮想環境：VirtualBox（Vagrant未使用）**
+- **OS：CentOS Stream**
+- **Webサーバー：nginx**
+- **Frontend：next.js**
+- **Backend：Dango Rest Framework**
+- **DB：MySQL**
 
 ## 2. 環境構築 VirtualBox
 
@@ -44,7 +47,7 @@ SSH鍵をssh-agentに登録
 
 ### 2-3. 時間同期
 
-再起動すると時間同期しているが、入りっぱなしだとダメ？
+再起動すると時間同期しているが、入りっぱなしだとダメ？  
 `VBoxManage guestproperty set karte "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold" 1000`  
 `VBoxManage setextradata "karte" "VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled" 0`  
 
@@ -72,12 +75,12 @@ SELINUX=disabled
 
 ### 3-2. zsh設定
 
-参考資料
+**参考資料**
 <https://qiita.com/uchiko/items/253088bb0d7bbf574bff>
 
 ### 3-3. vim設定
 
-参考資料
+**参考資料**
 <https://qiita.com/Ping/items/e8702413b79d725c07d9>
 
 ### 3-4. ファイアウォール操作
@@ -303,7 +306,7 @@ server {
 `cd /etc/nginx/`  
 `cp uwsgi_params ~/backend/karte`
 
-**グループの設定（exit後に反映される）**
+**グループの設定（リモートマシンからexit後に反映される）**
 
 - 確認  
 `id XXXX`  
@@ -355,6 +358,125 @@ WantedBy=multi-user.target
 Djangoまでのアクセスは以下のようになる。
 
 - **ブラウザ→nginx→uWSGI→Django**
+
+**参考資料**
+<https://qiita.com/Ajyarimochi/items/e76f62997e6979bd19fe>
+<https://qiita.com/Ajyarimochi/items/1345a49d70805db289a7>
+<https://qiita.com/MuuKojima/items/3ea452fd69756db9e815>
+<https://gakogako.com/django_rest_framework/>
+<https://blog.narito.ninja/detail/21/>
+
+### 4-1. pipenvの仮想環境に入って実行
+
+`pipenv shell`
+
+#### 4-1-1. 各種インストール
+
+`pipenv install djangorestframework`  
+`pipenv install django`  
+`pipenv install django-filter`  
+`pipenv install djangorestframework-jwt`  
+`pipenv install PyMySQL`  
+`pipenv install uwsgi`  
+`pipenv install pylint-django`  
+
+#### 4-1-2. pipfileの反映
+
+`pipenv update`  
+
+#### 4-1-3. プロジェクト作成
+
+**ドットが入らないとディレクトリ構成が変わる。アクセスもできないことがあるので注意**
+`cd /backend`  
+`django-admin startproject karte .`  
+
+#### 4-1-4. djangoの起動確認
+
+**ブラウザで確認したかったが、うまくいかなかったためcurlコマンドで確認**
+`python manage.py runserver 192.168.56.11:8001`  
+`python manage.py runserver 0.0.0.0:8001`  
+
+`curl 192.168.56.11:8001`  
+
+#### 4-1-5. djangoのアクセスにlocalhostを追加
+
+`vim ~/backend/karte/settings.py`  
+
+```python:settings.py
+ALLOWED_HOSTS = ['127.0.0.1','localhost']
+LANGUAGE_CODE = 'ja'
+TIME_ZONE = 'Asia/Tokyo'
+```
+
+### 4-2. uWSGI（APサーバみたいなもの）
+
+**上記まででDjangoのサーバー起動＆動作確認が完了している。ここではuWSGIでDjangoを動かす**
+
+#### 4-2-1. プロジェクト配下に確認用のpyファイルを作成
+
+`cd backend/karte`  
+`vim test.py`  
+
+```python:test.py
+def application(env, start_response):
+    start_response('200 OK',[('Content-type','text/html')])
+    return [b"Hello Wo0000000000000000rld"]
+```
+
+#### 4-2-2. uWSGIサーバー起動（test.pyを覗けるだけのサーバー）
+
+**起動時の場所に注意。ファイル参照はプロジェクト内から起動**
+**ここでは直接確認するために--http指定**
+`cd ~/backend/karte`  
+`uwsgi --http :8181 --wsgi-file test.py`  
+
+**サーバー確認**
+`curl 127.0.0.1:8181`  
+
+#### 4-2-3. uWSGIサーバー起動（Djangoに接続）
+
+**プロジェクト名.wsgiは存在する必要ないファイル**
+**manage.pyのある層で起動する必要あり**
+`cd ~/backend`  
+`uwsgi --http :8009 --module karte.wsgi`  
+
+**サーバー確認**
+`curl 127.0.0.1:8009`  
+
+**ここでエラーが発生したため、以下のコマンドでエラー解除した**
+<https://qiita.com/S8s8Max/items/e9852debecba996d215c>
+`python manage.py collectstatic`  
+
+#### 4-2-4. uWSGIの起動をINIファイルで実施（自動起動のために必要）
+
+<https://qiita.com/methane/items/e0949a37c112eedf2b74>
+<https://stackoverflow.com/questions/35792409/nginx-serving-django-in-a-subdirectory-through-uwsgi>
+
+`mkdir /home/ejiosa/backend/karte/uwsgi`  
+
+`vim /home/ejiosa/backend/karte/uwsgi/uwsgi.ini`  
+
+```:uwsgi.ini
+[uwsgi]
+chdir = /home/ejiosa/backend
+;module = karte.wsgi
+master = true
+socket = /run/uwsgi/uwsgi_karte.sock
+chmod-socket = 666
+pidfile = /home/ejiosa/backend/karte/uwsgi/uwsgi.pid
+logto = /home/ejiosa/dbackend/karte/uwsgi/uwsgi.log
+mount = /django=karte.wsgi:application
+manage-script-name = true
+```
+
+**INIファイルを手動起動**
+`cd backend`  
+`pipenv shell`  
+`cd karte`  
+`uwsgi --ini /home/ejiosa/backend/karte/uwsgi/uwsgi.ini`  
+
+**起動状態のログ確認**
+`tail -f /home/ejiosa/backend/karte/uwsgi/uwsgi.log`  
 
 ## 5. 環境構築 next.js（user権限）
 
