@@ -386,16 +386,17 @@ Djangoまでのアクセスは以下のようになる。
 
 #### 4-1-3. プロジェクト作成
 
-**ドットが入らないとディレクトリ構成が変わる。アクセスもできないことがあるので注意**  
+- **ドットが入らないとディレクトリ構成が変わる。アクセスもできないことがあるので注意**  
 `cd /backend`  
 `django-admin startproject karte .`  
 
 #### 4-1-4. djangoの起動確認
 
-**ブラウザで確認したかったが、うまくいかなかったためcurlコマンドで確認**  
+- **ブラウザで確認したかったが、うまくいかなかった**  
 `python manage.py runserver 192.168.56.11:8001`  
 `python manage.py runserver 0.0.0.0:8001`  
 
+- **curlコマンドで確認**  
 `curl 192.168.56.11:8001`  
 
 #### 4-1-5. djangoのアクセスにlocalhostを追加
@@ -410,7 +411,7 @@ TIME_ZONE = 'Asia/Tokyo'
 
 ### 4-2. uWSGI（APサーバみたいなもの）
 
-**上記まででDjangoのサーバー起動＆動作確認が完了している。ここではuWSGIでDjangoを動かす**
+- **上記まででDjangoのサーバー起動＆動作確認が完了している。ここではuWSGIでDjangoを動かす**
 
 #### 4-2-1. プロジェクト配下に確認用のpyファイルを作成
 
@@ -425,30 +426,32 @@ def application(env, start_response):
 
 #### 4-2-2. uWSGIサーバー起動（test.pyを覗けるだけのサーバー）
 
-**起動時の場所に注意。ファイル参照はプロジェクト内から起動**  
+- **起動時の場所に注意。ファイル参照はプロジェクト内から起動**  
 **ここでは直接確認するために--http指定**  
 `cd ~/backend/karte`  
 `uwsgi --http :8181 --wsgi-file test.py`  
 
-**サーバー確認**  
+- **サーバー確認**  
 `curl 127.0.0.1:8181`  
 
 #### 4-2-3. uWSGIサーバー起動（Djangoに接続）
 
-**プロジェクト名.wsgiは存在する必要ないファイル**
-**manage.pyのある層で起動する必要あり**
+- **プロジェクト名.wsgiは存在する必要ないファイル**  
+**manage.pyのある層で起動する必要あり**  
 `cd ~/backend`  
 `uwsgi --http :8009 --module karte.wsgi`  
 
-**サーバー確認**
+- **サーバー確認**  
 `curl 127.0.0.1:8009`  
+<br>
 
-**ここでエラーが発生したため、以下のコマンドでエラー解除した**  
+- **ここでエラーが発生したため、以下のコマンドでエラー解除した**  
 <https://qiita.com/S8s8Max/items/e9852debecba996d215c>
 `python manage.py collectstatic`  
 
 #### 4-2-4. uWSGIの起動をINIファイルで実施（自動起動のために必要）
 
+**参考資料**  
 <https://qiita.com/methane/items/e0949a37c112eedf2b74>
 <https://stackoverflow.com/questions/35792409/nginx-serving-django-in-a-subdirectory-through-uwsgi>
 
@@ -469,13 +472,13 @@ mount = /django=karte.wsgi:application
 manage-script-name = true
 ```
 
-**INIファイルを手動起動**  
+- **INIファイルを手動起動**  
 `cd backend`  
 `pipenv shell`  
 `cd karte`  
 `uwsgi --ini /home/ejiosa/backend/karte/uwsgi/uwsgi.ini`  
 
-**起動状態のログ確認**  
+- **起動状態のログ確認**  
 `tail -f /home/ejiosa/backend/karte/uwsgi/uwsgi.log`  
 
 ## 5. 環境構築 next.js（user権限）
